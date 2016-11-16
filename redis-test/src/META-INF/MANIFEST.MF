@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Class-Path: spring-core-4.1.6.RELEASE.jar commons-logging-1.2.jar spri
+ ng-tx-4.1.6.RELEASE.jar spring-beans-4.1.6.RELEASE.jar spring-core-4.
+ 1.6.RELEASE.jar commons-logging-1.2.jar commons-pool2-2.4.2.jar sprin
+ g-data-redis-1.6.2.RELEASE.jar spring-context-support-4.1.6.RELEASE.j
+ ar spring-beans-4.1.6.RELEASE.jar spring-core-4.1.6.RELEASE.jar commo
+ ns-logging-1.2.jar spring-context-4.1.6.RELEASE.jar spring-aop-4.1.6.
+ RELEASE.jar aopalliance-1.0.jar spring-expression-4.1.6.RELEASE.jar j
+ edis-2.8.0.jar
+Main-Class: com.ac.pt.service.Launcher
+
