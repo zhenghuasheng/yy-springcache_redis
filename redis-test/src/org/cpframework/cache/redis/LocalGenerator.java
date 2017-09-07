@@ -19,6 +19,7 @@ public class LocalGenerator implements KeyGenerator {
         String className = o.getClass().getSimpleName();
 
         sb.append(className + "-");
+        sb.append(method.getName()+ "-");
         for (Object obj : objects) {
             sb.append(obj.toString());
         }

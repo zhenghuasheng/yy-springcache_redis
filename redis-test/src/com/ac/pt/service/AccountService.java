@@ -22,14 +22,14 @@ public class AccountService {
 
 
 
-    @CachePut(value="commonCache")// 更新accountCache 缓存 ,key="#account.getCacheKey()"
+    @CachePut(value="commonCache",key = "#account.getName()")// 更新accountCache 缓存 ,key="#account.getCacheKey()"
     public Account updateAccount(Account account) {
         return updateDB(account);
     }
 
-    @CacheEvict(value="commonCache")// 清空accountCache 缓存
-    public void updateAccount1(Account account) {
-        updateDB(account);
+    @CacheEvict(value="commonCache",allEntries = true)// 清空accountCache 缓存
+        public void updateAccount1(Account account) {
+            updateDB(account);
     }
 
 
