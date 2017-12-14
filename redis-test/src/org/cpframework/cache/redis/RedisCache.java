@@ -1,20 +1,16 @@
 package org.cpframework.cache.redis;
 
 import org.springframework.cache.Cache;
-import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.support.SimpleValueWrapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.*;
-import java.lang.reflect.Method;
 
 /**
  * Created by Administrator on 2016/1/4.
  */
+
 public class RedisCache implements Cache {
     private RedisTemplate<String, Object> redisTemplate;
     private String name;
@@ -47,18 +43,15 @@ public class RedisCache implements Cache {
         // TODO Auto-generated method stub
         final String keyf = (String) key;
         Object object = null;
-        object = redisTemplate.execute(new RedisCallback<Object>() {
-            public Object doInRedis(RedisConnection connection)
-                    throws DataAccessException {
+        object = redisTemplate.execute((RedisCallback<Object>) connection -> {
 
-                byte[] key = keyf.getBytes();
-                byte[] value = connection.get(key);
-                if (value == null) {
-                    return null;
-                }
-                return toObject(value);
-
+            byte[] key1 = keyf.getBytes();
+            byte[] value = connection.get(key1);
+            if (value == null) {
+                return null;
             }
+            return toObject(value);
+
         });
         return (object != null ? new SimpleValueWrapper(object) : null);
     }
@@ -75,17 +68,14 @@ public class RedisCache implements Cache {
         final Object valuef = value;
         final long liveTime = 86400;
 
-        redisTemplate.execute(new RedisCallback<Long>() {
-            public Long doInRedis(RedisConnection connection)
-                    throws DataAccessException {
-                byte[] keyb = keyf.getBytes();
-                byte[] valueb = toByteArray(valuef);
-                connection.set(keyb, valueb);
-                if (liveTime > 0) {
-                    connection.expire(keyb, liveTime);
-                }
-                return 1L;
+        redisTemplate.execute((RedisCallback<Long>) connection -> {
+            byte[] keyb = keyf.getBytes();
+            byte[] valueb = toByteArray(valuef);
+            connection.set(keyb, valueb);
+            if (liveTime > 0) {
+                connection.expire(keyb, liveTime);
             }
+            return 1L;
         });
     }
 
@@ -148,23 +138,17 @@ public class RedisCache implements Cache {
     public void evict(Object key) {
         // TODO Auto-generated method stub
         final String keyf = (String) key;
-        redisTemplate.execute(new RedisCallback<Long>() {
-            public Long doInRedis(RedisConnection connection)
-                    throws DataAccessException {
-                return connection.del(keyf.getBytes());
-            }
+        redisTemplate.execute((RedisCallback<Long>) connection -> {
+            return connection.del(keyf.getBytes());
         });
     }
 
     @Override
     public void clear() {
         // TODO Auto-generated method stub
-        redisTemplate.execute(new RedisCallback<String>() {
-            public String doInRedis(RedisConnection connection)
-                    throws DataAccessException {
-                connection.flushDb();
-                return "ok";
-            }
+        redisTemplate.execute((RedisCallback<String>) connection -> {
+            connection.flushDb();
+            return "ok";
         });
     }
 }
